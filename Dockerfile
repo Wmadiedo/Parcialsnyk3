@@ -1,20 +1,28 @@
-# Use an official Node.js runtime as a parent image
-FROM node:14
+# Use official Node.js LTS image (version 18 as of 2023)
+FROM node:18-alpine
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Install dependencies first for better layer caching
+COPY package.json package-lock.json ./
 
-# Install app dependencies
-RUN npm install
+# Install production dependencies only (no devDependencies)
+RUN npm ci --only=production
 
-# Copy the rest of the application code to the working directory
+# Copy the rest of the application code
 COPY . .
+
+# Create a non-root user and switch to it for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
 
 # Expose the port the app runs on
 EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost:3000/health || exit 1
 
 # Define the command to run the application
 CMD ["npm", "start"]
