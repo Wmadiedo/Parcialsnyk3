@@ -7,7 +7,8 @@ WORKDIR /usr/src/app
 # Install dependencies first for better layer caching
 COPY package*.json ./
 
-RUN npm install
+# Install dependencies
+RUN npm ci --only=production
 
 # Copy the rest of the application code
 COPY . .
