@@ -5,10 +5,9 @@ FROM node:18-alpine
 WORKDIR /usr/src/app
 
 # Install dependencies first for better layer caching
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
-# Install production dependencies only (no devDependencies)
-RUN npm ci --only=production
+RUN npm install
 
 # Copy the rest of the application code
 COPY . .
