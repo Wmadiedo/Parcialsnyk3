@@ -1,0 +1,12 @@
+{
+  "name": "Mi-app-de-ejemplo-wmh",
+  "version": "1.0.0",
+  "description": "App simple con nodejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "wollman  madiedo hoyos",
+  "license": "ISC",
+  "dependencies": {}
+}
