@@ -1,17 +1,20 @@
-FROM node:20 AS builder
+# Use an official Node.js runtime as a parent image
+FROM node:14
+
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
+# Install app dependencies
+RUN npm install
+
+# Copy the rest of the application code to the working directory
 COPY . .
 
-FROM node:20-slim
-WORKDIR /usr/src/app
-
-COPY --from=builder /usr/src/app ./
-
-RUN useradd -m appuser
-USER appuser
-
+# Expose the port the app runs on
 EXPOSE 3000
+
+# Define the command to run the application
 CMD ["npm", "start"]
